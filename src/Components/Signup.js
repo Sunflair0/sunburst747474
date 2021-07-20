@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 
 const Signup = ({ signUp }) => {
   const [email, setEmail] = useState("");
