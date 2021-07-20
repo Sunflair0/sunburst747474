@@ -13,7 +13,7 @@ import Landing from "./components/Landing";
 import Signup from "./components/Signup";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(true);
   const signUp = useCallback((email, password) => {
     // TODO IMPLEMENT
   });
