@@ -36,14 +36,14 @@ function App() {
         <nav>
           <NavLink to="/login">Login</NavLink>
           <NavLink to="/signup">Signup</NavLink>
-          <button>Logout</button>
+           <button className="btn" onClick={logout}>Logout</button>
         </nav>
         <Switch>
           <ProtectedRoute path="/login" isProtected={false} user={user}>
             <Login />
           </ProtectedRoute>
           <ProtectedRoute path="/signup" isProtected={false} user={user}>
-            <Signup />
+            <Signup signUp ={signUp} />
           </ProtectedRoute>
           <ProtectedRoute path="/landing" isProtected={true} user={user}>
             <Landing />
