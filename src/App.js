@@ -1,5 +1,5 @@
 import "./App.css";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   NavLink,
@@ -11,18 +11,16 @@ import ProtectedRoute from "./shared/ProtectedRoute";
 import Login from "./components/Login";
 import Landing from "./components/Landing";
 import Signup from "./components/Signup";
-
+import app, { auth } from "./Firebase";
 
 function App() {
   const [user, setUser] = useState(null);
   const signUp = useCallback((email, password) => {
-    // TODO IMPLEMENT
-    console.log(`Received to signup ${email} ${password}... NYI`);
+    auth.createUserWithEmailAndPassword(email, password);
   });
 
   const loginWithEmail = useCallback((email, password) => {
-    // TODO IMPLEMENT
-    console.log(`Received to login ${email} ${password}... NYI`);
+    auth.signInWithEmailAndPassword(email, password);
   });
 
   const loginWithGoogle = useCallback(() => {
@@ -31,9 +29,15 @@ function App() {
   });
 
   const logout = useCallback(() => {
-    // TODO IMPLEMENT
-    console.log(`Triggered Logout`);
+    auth.signOut();
   });
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      console.log(user);
+      setUser(user);
+    });
+  }, []);
 
   return (
     <Router>
