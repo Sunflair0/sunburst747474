@@ -1,5 +1,5 @@
 import "./App.css";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   NavLink,
@@ -11,24 +11,33 @@ import ProtectedRoute from "./shared/ProtectedRoute";
 import Login from "./components/Login";
 import Landing from "./components/Landing";
 import Signup from "./components/Signup";
+import app, { auth } from "./Firebase";
 
 function App() {
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState(null);
   const signUp = useCallback((email, password) => {
-    // TODO IMPLEMENT
+    auth.createUserWithEmailAndPassword(email, password);
   });
 
   const loginWithEmail = useCallback((email, password) => {
-    // TODO IMPLEMENT
+    auth.signInWithEmailAndPassword(email, password);
   });
 
   const loginWithGoogle = useCallback(() => {
     // TODO IMPLEMENT
+    console.log(`Triggered Login with Google`);
   });
 
   const logout = useCallback(() => {
-    // TODO IMPLEMENT
+    auth.signOut();
   });
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      console.log(user);
+      setUser(user);
+    });
+  }, []);
 
   return (
     <Router>
@@ -36,14 +45,17 @@ function App() {
         <nav>
           <NavLink to="/login">Login</NavLink>
           <NavLink to="/signup">Signup</NavLink>
-          <button>Logout</button>
+          <button onClick={logout}>Logout</button>
         </nav>
         <Switch>
           <ProtectedRoute path="/login" isProtected={false} user={user}>
-            <Login />
+            <Login
+              loginWithEmail={loginWithEmail}
+              loginWithGoogle={loginWithGoogle}
+            />
           </ProtectedRoute>
           <ProtectedRoute path="/signup" isProtected={false} user={user}>
-            <Signup />
+            <Signup signUp={signUp} />
           </ProtectedRoute>
           <ProtectedRoute path="/landing" isProtected={true} user={user}>
             <Landing />
